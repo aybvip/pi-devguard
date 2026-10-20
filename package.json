@@ -1,0 +1,31 @@
+{
+  "name": "pi-devguard",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Unified read-only runner that invokes the sibling Pi measurement tools as subprocesses and reports one verdict per tool, strictly separating measured / nothing-found / undetermined. It never says 'safe'.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "guard": "node guard.mjs",
+    "boundaries": "node guard.mjs --boundaries",
+    "tools": "node guard.mjs --tools",
+    "verdicts": "node guard.mjs --verdicts",
+    "sources": "node guard.mjs --sources",
+    "demo": "node guard.mjs --demo",
+    "test": "node test/run.mjs"
+  },
+  "keywords": [
+    "pi-network",
+    "soroban",
+    "read-only",
+    "measurement",
+    "developer-tooling"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aybvip/pi-devguard.git"
+  }
+}

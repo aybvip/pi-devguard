@@ -1,0 +1,74 @@
+# pi-devguard
+
+> A read-only runner that invokes six sibling Pi measurement tools as subprocesses and
+> reports one verdict per tool. It never says "safe". A clean run is not a pass.
+
+## One-line answers
+
+- What is this? One command that runs six sibling tools and prints one verdict each,
+  always next to the exit code it read.
+- Does it import the other tools? **No.** Every tool is a subprocess through its own CLI.
+- Does it add its own verdict? **No.** It repeats the tool's exit code and labels it.
+- Does it say anything is safe? **No.** There is no verdict word for it.
+- Is a clean run a pass? **No.** `nothing-found` is a fact about the input, not the system.
+- Is a non-zero exit a failure? **Not automatically.** For these tools `1` often means
+  "I found something".
+- Does it touch the network by default? **No.** Offline commands are the default; `--live`
+  reads public endpoints only.
+- What are the tools? `scanner` (SDK anti-patterns), `simulator` (Testnet contract calls),
+  `registry` (API drift), `integrity` (event coverage), `chaos` (failure shapes),
+  `proofkit` (portable proof packs).
+- What are the verdicts? `measured` · `nothing-found` · `undetermined`. Exactly three.
+- What is the runner's own exit code? `0` when every tool reached a verdict, `2` when one
+  could not. It never exits `1`.
+- How do I check it? `node guard.mjs` (offline), `node guard.mjs --live` (live),
+  `node test/run.mjs` (offline invariants).
+
+## Commands (zero-dependency)
+
+```
+node guard.mjs                    # offline reading for every tool
+node guard.mjs --live             # live reading where a tool has one
+node guard.mjs --tool <id>        # one tool
+node guard.mjs --scan-dir DIR     # the directory the scanner reads
+node guard.mjs --json             # machine-readable
+node guard.mjs --html [FILE]      # self-contained HTML report
+node guard.mjs --verbose          # include raw tool output
+node guard.mjs --tools            # the tool registry
+node guard.mjs --verdicts         # the verdict vocabulary and exit maps
+node guard.mjs --sources          # the sibling tools, by purpose
+node guard.mjs --boundaries       # every non-claim
+node test/run.mjs                 # offline invariants
+```
+
+## Claim kinds
+
+Every statement is exactly one of: `measured` · `documented` · `external` · `not-claimed`.
+
+## Never claimed
+
+Safety, completeness of the tool set, adoption, endorsement, obligation, or that a clean
+run is a pass. No prediction about any subject's behaviour.
+
+## Pages
+
+- https://github.com/aybvip/pi-devguard/blob/main/docs/VERDICTS.md
+- https://github.com/aybvip/pi-devguard/blob/main/docs/EXIT-CODES.md
+- https://github.com/aybvip/pi-devguard/blob/main/docs/BOUNDARIES.md
+- https://github.com/aybvip/pi-devguard/blob/main/docs/DECISIONS.md
+- https://github.com/aybvip/pi-devguard/blob/main/docs/SOURCES.md
+- https://github.com/aybvip/pi-devguard/blob/main/docs/VERIFICATION.md
+
+## Related
+
+- pi-app-security-scanner: https://github.com/aybvip/pi-app-security-scanner
+- pi-contract-simulator: https://github.com/aybvip/pi-contract-simulator
+- pi-api-contract-registry: https://github.com/aybvip/pi-api-contract-registry
+- pi-event-integrity: https://github.com/aybvip/pi-event-integrity
+- pi-chaos-lab: https://github.com/aybvip/pi-chaos-lab
+- pi-proofkit: https://github.com/aybvip/pi-proofkit
+
+## Scope
+
+Read-only, unofficial. Not affiliated with Pi Network. A result describes a tool's run,
+not the system the tool was pointed at.

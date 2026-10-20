@@ -1,0 +1,8 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# Generated reports (never committed)
+report.html
+*.report.html

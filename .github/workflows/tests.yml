@@ -1,0 +1,46 @@
+name: tests
+
+# Runs the repository's own offline test suite on every push and pull request.
+#
+# Every check here is offline and read-only: the suite never opens a socket, never
+# signs, never submits, and needs no secrets. The test command is exactly the one
+# in package.json ("scripts.test"), so CI and a local run are the same thing.
+#
+# NOTE: this repository's tests assert that each SIBLING tool's CLI exists at its
+# expected path, and re-derive each aggregated reading by running that CLI. Those
+# assertions need the six sibling repositories present as sibling directories. In
+# CI only this repository is checked out, so those specific assertions report as
+# skipped (never as passed, never as failed) and the pure-function, interpreter,
+# renderer, and CLI-flag assertions run in full. Run locally with the siblings
+# present to execute the sibling-dependent set too.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["20.x", "22.x"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Offline test suite (read-only, no network)
+        run: npm test
